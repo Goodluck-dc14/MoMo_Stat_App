@@ -23,7 +23,7 @@ This is my project for the MoMo Data Analysis assignment. It’s a full-stack ap
 
    - Make sure Python 3 is installed (`python3 --version`).
    - Install Git (`git --version`).
-   - Clone this repo: `git clone <(https://github.com/Goodluck-dc14/MoMo_Stat_App.git)>` (replace with your GitHub repo URL after creating it).
+   - Clone this repo: `git clone <https://github.com/Goodluck-dc14/MoMo_Stat_App.git>` (replace with your GitHub repo URL after creating it).
    - Go to the project folder: `cd MoMo_Stat_App`.
 
 2. **Create a Virtual Environment**:
@@ -31,3 +31,6 @@ This is my project for the MoMo Data Analysis assignment. It’s a full-stack ap
    python3 -m venv env
    source env/bin/activate
    ```
+
+## PDF REPORT
+https://docs.google.com/document/d/1YEfro8m5rG1ucElmZfMwy1WBBKJe0qwB0crW33eVB_4/edit?usp=sharing
