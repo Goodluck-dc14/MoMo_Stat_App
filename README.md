@@ -226,27 +226,10 @@ GET /get-incoming-money                # Returns incoming money data as JSON
 
 **Detailed PDF Report:** [https://docs.google.com/document/d/1YEfro8m5rG1ucElmZfMwy1WBBKJe0qwB0crW33eVB_4/edit?usp=sharing](https://docs.google.com/document/d/1YEfro8m5rG1ucElmZfMwy1WBBKJe0qwB0crW33eVB_4/edit?usp=sharing)
 
-## 🔮 Future Improvements
-
-- Add user authentication and role-based access
-- Implement real-time data updates with WebSockets
-- Create PDF export functionality for reports
-- Add machine learning for fraud detection
-- Build mobile app version with React Native
-
+**Video Recording:** [https://drive.google.com/file/d/1nkbXlqXTWhM7bzx2k8katZ1R4rhmnKhz/view?usp=sharing]
 ## �‍💻 About Me
 
-**Goodluck DC** - Full Stack Developer
+**Goodluck DC** - Software Engineer
 
 - GitHub: [@Goodluck-dc14](https://github.com/Goodluck-dc14)
-- Email: [your.email@example.com]
-
-This project demonstrates my skills in data processing, database design, backend development with Python/Flask, and frontend development with modern web technologies.
-
-## 📄 License
-
-This project was developed for academic purposes as part of a summative assignment.
-
-## 🙏 Acknowledgments
-
-Thanks to MTN Rwanda for providing the context and inspiration for this mobile money analytics project.
+- Email: [i.ogbonna@alustudent.com]
