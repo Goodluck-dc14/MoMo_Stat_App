@@ -1,243 +1,209 @@
 import sqlite3
-from flask import Flask, render_template, jsonify, request, render_template
-from helpers import analyze_incoming_money_transactions, analyze__airtime_transactions, get_table_summary
-from datetime import datetime
+from flask import Flask, render_template, jsonify
+from helpers import get_table_summary, analyze_incoming_money_transactions
 
 app = Flask(__name__)
-
 
 def get_db_connection():
     conn = sqlite3.connect('momo_data.db')
     conn.row_factory = sqlite3.Row
     return conn
 
-
+# API Routes for data fetching
 @app.route('/get-airtime-payments')
 def get_airtime_payments():
     conn = get_db_connection()
-    airtime_payments = conn.execute(
-        'SELECT * FROM airtime_payments').fetchall()
+    payments = conn.execute('SELECT * FROM airtime_payments').fetchall()
     conn.close()
-    results = [dict(payment) for payment in airtime_payments]
-
+    results = [dict(payment) for payment in payments]
     return jsonify(results)
 
-
-@app.route('/get-airtime-payments/stats')
+@app.route('/get-airtime-payments-stats')
 def get_airtime_payments_stats():
     conn = get_db_connection()
-    airtime_payments = conn.execute(
-        'SELECT * FROM airtime_payments').fetchall()
+    payments = conn.execute('SELECT * FROM airtime_payments').fetchall()
     conn.close()
-    results = [dict(payment) for payment in airtime_payments]
-
-    # return jsonify(results)
-    stats = analyze__airtime_transactions(results)
+    results = [dict(payment) for payment in payments]
+    stats = analyze_incoming_money_transactions(results)
     return jsonify(stats)
-
 
 @app.route('/get-incoming-money')
 def get_incoming_money():
     conn = get_db_connection()
-    incoming_money = conn.execute(
-        'SELECT * FROM incoming_money').fetchall()
+    money = conn.execute('SELECT * FROM incoming_money').fetchall()
     conn.close()
-    results = [dict(money) for money in incoming_money]
-
+    results = [dict(money) for money in money]
     return jsonify(results)
 
-
-@app.route('/get-incoming-money/stats')
+@app.route('/get-incoming-money-stats')
 def get_incoming_money_stats():
     conn = get_db_connection()
-    incoming_money = conn.execute(
-        'SELECT * FROM incoming_money').fetchall()
+    incoming_money = conn.execute('SELECT * FROM incoming_money').fetchall()
     conn.close()
     results = [dict(money) for money in incoming_money]
     stats = analyze_incoming_money_transactions(results)
-
     return jsonify(stats)
 
-
-@app.route('/get-transfers-to-mobile_numbers')
+@app.route('/get-transfers-to-mobile-numbers')
 def get_transfers_to_mobile_numbers():
     conn = get_db_connection()
-    transfers = conn.execute(
-        'SELECT * FROM transfers_to_mobile_numbers').fetchall()
+    payments = conn.execute('SELECT * FROM transfers_to_mobile_numbers').fetchall()
     conn.close()
-    results = [dict(money) for money in transfers]
-
+    results = [dict(payment) for payment in payments]
     return jsonify(results)
 
-
-@app.route('/get-payment-to-code-holders')
+@app.route('/get-payments-to-code-holders')
 def get_payments_to_code_holders():
     conn = get_db_connection()
-    payments = conn.execute(
-        'SELECT * FROM payment_to_code_holders').fetchall()
+    payments = conn.execute('SELECT * FROM payments_to_code_holders').fetchall()
     conn.close()
     results = [dict(payment) for payment in payments]
-
     return jsonify(results)
-
-
-@app.route('/get-bank-transfers')
-def get_bank_transfers():
-    conn = get_db_connection()
-    payments = conn.execute(
-        'SELECT * FROM bank_transfers').fetchall()
-    conn.close()
-    results = [dict(payment) for payment in payments]
-
-    return jsonify(results)
-
-
-@app.route('/get-internet-voice-bundles')
-def get_internet_voice_bundles():
-    conn = get_db_connection()
-    payments = conn.execute(
-        'SELECT * FROM internet_voice_bundles').fetchall()
-    conn.close()
-    results = [dict(payment) for payment in payments]
-
-    return jsonify(results)
-
-
-@app.route('/get-cash-power-bill-payments')
-def get_cash_power_bill_payments():
-    conn = get_db_connection()
-    payments = conn.execute(
-        'SELECT * FROM cash_power_bill_payments').fetchall()
-    conn.close()
-    results = [dict(payment) for payment in payments]
-
-    return jsonify(results)
-
-
-@app.route('/get-txns-from-third-parties')
-def get_trantnxs_from_third_parties():
-    conn = get_db_connection()
-    payments = conn.execute(
-        'SELECT * FROM transactions_initiated_by_third_parties').fetchall()
-    conn.close()
-    results = [dict(payment) for payment in payments]
-
-    return jsonify(results)
-
 
 @app.route('/get-withdrawals-from-agents')
 def get_withdrawals_from_agents():
     conn = get_db_connection()
-    withdrawals = conn.execute(
-        'SELECT * FROM withdrawals_from_agents').fetchall()
+    payments = conn.execute('SELECT * FROM withdrawals_from_agents').fetchall()
     conn.close()
-    results = [dict(payment) for payment in withdrawals]
-
+    results = [dict(payment) for payment in payments]
     return jsonify(results)
 
-
-@app.route('/get-stats')
-def get_momo_stats():
+@app.route('/get-bank-transfers')
+def get_bank_transfers():
     conn = get_db_connection()
-    incoming_money = conn.execute(
-        'SELECT * FROM incoming_money').fetchall()
+    payments = conn.execute('SELECT * FROM bank_transfers').fetchall()
     conn.close()
-    results = [dict(money) for money in incoming_money]
-    stats = analyze_incoming_money_transactions(results)
+    results = [dict(payment) for payment in payments]
+    return jsonify(results)
 
-    return jsonify(stats)
+@app.route('/get-bundle-purchases')
+def get_bundle_purchases():
+    conn = get_db_connection()
+    payments = conn.execute('SELECT * FROM bundle_purchases').fetchall()
+    conn.close()
+    results = [dict(payment) for payment in payments]
+    return jsonify(results)
 
+@app.route('/get-cashpower-payments')
+def get_cashpower_payments():
+    conn = get_db_connection()
+    payments = conn.execute('SELECT * FROM cashpower_payments').fetchall()
+    conn.close()
+    results = [dict(payment) for payment in payments]
+    return jsonify(results)
 
+@app.route('/get-third-party-transactions')
+def get_third_party_transactions():
+    conn = get_db_connection()
+    payments = conn.execute('SELECT * FROM third_party_transactions').fetchall()
+    conn.close()
+    results = [dict(payment) for payment in payments]
+    return jsonify(results)
+
+# Dashboard and Page Routes
 @app.route('/')
 def dashboard():
     conn = get_db_connection()
     tables = [
         "airtime_payments",
-        "incoming_money",
+        "incoming_money", 
         "transfers_to_mobile_numbers",
-        "payment_to_code_holders",
+        "payments_to_code_holders",
         "bank_transfers",
-        "internet_voice_bundles",
-        "cash_power_bill_payments",
-        "transactions_initiated_by_third_parties",
+        "bundle_purchases",
+        "cashpower_payments",
+        "third_party_transactions",
         "withdrawals_from_agents"
     ]
 
-
-    db_summary =  [get_table_summary(table) for table in tables]
+    db_summary = [get_table_summary(table) for table in tables]
     for table in tables:
         summary = get_table_summary(table)
-        print(summary)
+        if summary:
+            print(summary)
 
-    return render_template('index.html', transactions=transactions)
-
+    return render_template('index.html', db_summary=db_summary)
 
 @app.route('/airtime')
 def airtime():
     conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM airtime_payments').fetchall()
+    transactions = conn.execute('SELECT * FROM airtime_payments ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
     return render_template('airtime.html', transactions=transactions)
 
+@app.route('/incoming-money')
+def incoming_money():
+    conn = get_db_connection()
+    transactions = conn.execute('SELECT * FROM incoming_money ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
+    return render_template('incoming-money.html', transactions=transactions)
+
+@app.route('/transfers-to-mobile')
+def mobile_transfers():
+    conn = get_db_connection()
+    transactions = conn.execute('SELECT * FROM transfers_to_mobile_numbers ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
+    return render_template('transfers-to-mobile.html', transactions=transactions)
+
+@app.route('/code-holders')
+def code_holders():
+    conn = get_db_connection()
+    transactions = conn.execute('SELECT * FROM payments_to_code_holders ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
+    return render_template('code-holders.html', transactions=transactions)
 
 @app.route('/bank-transfers')
-def bankTransfers():
+def bank_transfers():
     conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM bank_transfers').fetchall()
+    transactions = conn.execute('SELECT * FROM bank_transfers ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
     return render_template('bank-transfers.html', transactions=transactions)
 
 @app.route('/cash-power')
-def cashPower():
+def cash_power():
     conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM cash_power_bill_payments').fetchall()
+    transactions = conn.execute('SELECT * FROM cashpower_payments ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
     return render_template('cash-power-bill.html', transactions=transactions)
 
-
-@app.route('/incoming-money')
-def incomingMoney():
-    conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM incoming_money').fetchall()
-    return render_template('incoming-money.html', transactions=transactions)
-
-
 @app.route('/internet-voice')
-def internetBundles():
+def internet_bundles():
     conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM internet_voice_bundles').fetchall()
+    transactions = conn.execute('SELECT * FROM bundle_purchases ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
     return render_template('internet-voice-bundles.html', transactions=transactions)
 
-@app.route('/code-holders')
-def codeHolders():
-    conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM payment_to_code_holders').fetchall()
-    return render_template('code-holders.html', transactions=transactions)
-
-
 @app.route('/third-parties')
-def thirdParties():
+def third_parties():
     conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM transactions_initiated_by_third_parties').fetchall()
+    transactions = conn.execute('SELECT * FROM third_party_transactions ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
     return render_template('third-party.html', transactions=transactions)
 
-@app.route('/transfers-to-mobile')
-def mobileTransfers():
-    conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM transfers_to_mobile_numbers').fetchall()
-    return render_template('transfers-to-mobile.html', transactions=transactions)
-
 @app.route('/agent-withdrawals')
-def agentWithdrawals():
+def agent_withdrawals():
     conn = get_db_connection()
-    transactions = conn.execute(
-        'SELECT * FROM withdrawals_from_agents').fetchall()
+    transactions = conn.execute('SELECT * FROM withdrawals_from_agents ORDER BY date DESC').fetchall()
+    conn.close()
+    # Convert Row objects to dictionaries for JSON serialization
+    transactions = [dict(row) for row in transactions]
     return render_template('agent-withdrawal.html', transactions=transactions)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
