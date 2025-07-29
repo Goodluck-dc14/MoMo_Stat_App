@@ -1,608 +1,857 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MTN MoMo Analytics Dashboard</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .card-hover {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+      }
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-        .card-hover {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        100% {
+          transform: rotate(360deg);
         }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      }
+      /* Custom styles for responsive sidebar */
+      @media (max-width: 1024px) {
+        .sidebar-responsive {
+          display: none;
         }
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
+        .sidebar-mobile {
+          display: block;
         }
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+      }
+      @media (min-width: 1024px) {
+        .sidebar-responsive {
+          display: block;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .sidebar-mobile {
+          display: none;
         }
-        /* Custom styles for responsive sidebar */
-        @media (max-width: 1024px) {
-            .sidebar-responsive {
-                display: none;
-            }
-            .sidebar-mobile {
-                display: block;
-            }
-        }
-        @media (min-width: 1024px) {
-            .sidebar-responsive {
-                display: block;
-            }
-            .sidebar-mobile {
-                display: none;
-            }
-        }
+      }
     </style>
-</head>
-<body class="bg-gray-100">
+  </head>
+  <body class="bg-gray-100">
     <!-- Navigation -->
     <nav class="gradient-bg shadow-lg">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-4">
-                    <i class="fas fa-mobile-alt text-white text-2xl"></i>
-                    <h1 class="text-white text-xl font-bold">MTN MoMo Analytics</h1>
-                </div>
-                <div class="text-white text-sm">
-                    <i class="fas fa-database mr-2"></i>
-                    Real-time Transaction Dashboard
-                </div>
-            </div>
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center space-x-4">
+            <i class="fas fa-mobile-alt text-white text-2xl"></i>
+            <h1 class="text-white text-xl font-bold">MTN MoMo Analytics</h1>
+          </div>
+          <div class="text-white text-sm">
+            <i class="fas fa-database mr-2"></i>
+            Real-time Transaction Dashboard
+          </div>
         </div>
+      </div>
     </nav>
 
     <!-- Main Container -->
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="sidebar-responsive w-64 bg-white shadow-lg min-h-screen sticky top-0" id="sidebar">
-            <div class="flex items-center justify-between p-4 border-b">
-                <h2 class="text-lg font-semibold text-gray-800">Navigation</h2>
-            </div>
-            <nav class="mt-4">
-                <a href="/" class="flex items-center px-4 py-3 text-white bg-blue-600 border-r-4 border-blue-800 transition-colors">
-                    <i class="fas fa-home mr-3"></i>
-                    Dashboard
-                </a>
-                <a href="/airtime" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-mobile-alt mr-3"></i>
-                    Airtime Payments
-                </a>
-                <a href="/incoming-money" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-arrow-down mr-3"></i>
-                    Incoming Money
-                </a>
-                <a href="/transfers-to-mobile" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-paper-plane mr-3"></i>
-                    Mobile Transfers
-                </a>
-                <a href="/code-holders" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-qrcode mr-3"></i>
-                    Code Payments
-                </a>
-                <a href="/bank-transfers" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-university mr-3"></i>
-                    Bank Transfers
-                </a>
-                <a href="/internet-voice" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-wifi mr-3"></i>
-                    Internet/Voice Bundles
-                </a>
-                <a href="/cash-power" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-bolt mr-3"></i>
-                    CashPower
-                </a>
-                <a href="/third-parties" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-handshake mr-3"></i>
-                    Third Party
-                </a>
-                <a href="/agent-withdrawals" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-hand-holding-usd mr-3"></i>
-                    Agent Withdrawals
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Mobile sidebar overlay -->
-        
-        <!-- Mobile Menu -->
-        <div class="sidebar-mobile bg-white shadow-sm p-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-gray-800">MTN MoMo Analytics</h2>
-                <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-gray-900">
-                    <i class="fas fa-bars text-xl" id="menu-icon"></i>
-                </button>
-            </div>
-            <div class="hidden mt-4" id="mobile-menu">
-                <a href="/" class="flex items-center px-4 py-2 text-white bg-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-home mr-3"></i>
-                    Dashboard
-                </a>
-                <a href="/airtime" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-mobile-alt mr-3"></i>
-                    Airtime Payments
-                </a>
-                <a href="/incoming-money" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-arrow-down mr-3"></i>
-                    Incoming Money
-                </a>
-                <a href="/transfers-to-mobile" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-paper-plane mr-3"></i>
-                    Mobile Transfers
-                </a>
-                <a href="/code-holders" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-qrcode mr-3"></i>
-                    Code Payments
-                </a>
-                <a href="/bank-transfers" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-university mr-3"></i>
-                    Bank Transfers
-                </a>
-                <a href="/internet-voice" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-wifi mr-3"></i>
-                    Internet/Voice Bundles
-                </a>
-                <a href="/cash-power" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-bolt mr-3"></i>
-                    CashPower
-                </a>
-                <a href="/third-parties" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-handshake mr-3"></i>
-                    Third Party
-                </a>
-                <a href="/agent-withdrawals" class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors">
-                    <i class="fas fa-hand-holding-usd mr-3"></i>
-                    Agent Withdrawals
-                </a>
-            </div>
+      <!-- Sidebar -->
+      <aside
+        class="sidebar-responsive w-64 bg-white shadow-lg min-h-screen sticky top-0"
+        id="sidebar"
+      >
+        <div class="flex items-center justify-between p-4 border-b">
+          <h2 class="text-lg font-semibold text-gray-800">Navigation</h2>
         </div>
-        
-        <!-- Main Content -->
-        <main class="flex-1">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Search and Filter Section -->
-        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+        <nav class="mt-4">
+          <a
+            href="/"
+            class="flex items-center px-4 py-3 text-white bg-blue-600 border-r-4 border-blue-800 transition-colors"
+          >
+            <i class="fas fa-home mr-3"></i>
+            Dashboard
+          </a>
+          <a
+            href="/airtime"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-mobile-alt mr-3"></i>
+            Airtime Payments
+          </a>
+          <a
+            href="/incoming-money"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-arrow-down mr-3"></i>
+            Incoming Money
+          </a>
+          <a
+            href="/transfers-to-mobile"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-paper-plane mr-3"></i>
+            Mobile Transfers
+          </a>
+          <a
+            href="/code-holders"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-qrcode mr-3"></i>
+            Code Payments
+          </a>
+          <a
+            href="/bank-transfers"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-university mr-3"></i>
+            Bank Transfers
+          </a>
+          <a
+            href="/internet-voice"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-wifi mr-3"></i>
+            Internet/Voice Bundles
+          </a>
+          <a
+            href="/cash-power"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-bolt mr-3"></i>
+            CashPower
+          </a>
+          <a
+            href="/third-parties"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-handshake mr-3"></i>
+            Third Party
+          </a>
+          <a
+            href="/agent-withdrawals"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-hand-holding-usd mr-3"></i>
+            Agent Withdrawals
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Mobile sidebar overlay -->
+
+      <!-- Mobile Menu -->
+      <div class="sidebar-mobile bg-white shadow-sm p-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-gray-800">
+            MTN MoMo Analytics
+          </h2>
+          <button
+            onclick="toggleMobileMenu()"
+            class="text-gray-600 hover:text-gray-900"
+          >
+            <i class="fas fa-bars text-xl" id="menu-icon"></i>
+          </button>
+        </div>
+        <div class="hidden mt-4" id="mobile-menu">
+          <a
+            href="/"
+            class="flex items-center px-4 py-2 text-white bg-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-home mr-3"></i>
+            Dashboard
+          </a>
+          <a
+            href="/airtime"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-mobile-alt mr-3"></i>
+            Airtime Payments
+          </a>
+          <a
+            href="/incoming-money"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-arrow-down mr-3"></i>
+            Incoming Money
+          </a>
+          <a
+            href="/transfers-to-mobile"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-paper-plane mr-3"></i>
+            Mobile Transfers
+          </a>
+          <a
+            href="/code-holders"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-qrcode mr-3"></i>
+            Code Payments
+          </a>
+          <a
+            href="/bank-transfers"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-university mr-3"></i>
+            Bank Transfers
+          </a>
+          <a
+            href="/internet-voice"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-wifi mr-3"></i>
+            Internet/Voice Bundles
+          </a>
+          <a
+            href="/cash-power"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-bolt mr-3"></i>
+            CashPower
+          </a>
+          <a
+            href="/third-parties"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-handshake mr-3"></i>
+            Third Party
+          </a>
+          <a
+            href="/agent-withdrawals"
+            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mb-2 transition-colors"
+          >
+            <i class="fas fa-hand-holding-usd mr-3"></i>
+            Agent Withdrawals
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <main class="flex-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <!-- Search and Filter Section -->
+          <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
             <h2 class="text-lg font-semibold mb-4 text-gray-800">
-                <i class="fas fa-search mr-2"></i>Search & Filter Transactions
+              <i class="fas fa-search mr-2"></i>Search & Filter Transactions
             </h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Transaction Type</label>
-                    <select id="transactionType" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-                        <option value="">All Types</option>
-                        <option value="airtime_payments">Airtime Payments</option>
-                        <option value="incoming_money">Incoming Money</option>
-                        <option value="transfers_to_mobile_numbers">Mobile Transfers</option>
-                        <option value="payments_to_code_holders">Code Payments</option>
-                        <option value="bank_transfers">Bank Transfers</option>
-                        <option value="bundle_purchases">Bundle Purchases</option>
-                        <option value="cashpower_payments">CashPower</option>
-                        <option value="third_party_transactions">Third Party</option>
-                        <option value="withdrawals_from_agents">Agent Withdrawals</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Date From</label>
-                    <input type="date" id="dateFrom" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Date To</label>
-                    <input type="date" id="dateTo" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-                </div>
-                <div class="flex items-end">
-                    <button id="applyFilters" class="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                        <i class="fas fa-filter mr-2"></i>Apply Filters
-                    </button>
-                </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Transaction Type</label
+                >
+                <select
+                  id="transactionType"
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                >
+                  <option value="">All Types</option>
+                  <option value="airtime_payments">Airtime Payments</option>
+                  <option value="incoming_money">Incoming Money</option>
+                  <option value="transfers_to_mobile_numbers">
+                    Mobile Transfers
+                  </option>
+                  <option value="payments_to_code_holders">
+                    Code Payments
+                  </option>
+                  <option value="bank_transfers">Bank Transfers</option>
+                  <option value="bundle_purchases">Bundle Purchases</option>
+                  <option value="cashpower_payments">CashPower</option>
+                  <option value="third_party_transactions">Third Party</option>
+                  <option value="withdrawals_from_agents">
+                    Agent Withdrawals
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Date From</label
+                >
+                <input
+                  type="date"
+                  id="dateFrom"
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Date To</label
+                >
+                <input
+                  type="date"
+                  id="dateTo"
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+              </div>
+              <div class="flex items-end">
+                <button
+                  id="applyFilters"
+                  class="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  <i class="fas fa-filter mr-2"></i>Apply Filters
+                </button>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <!-- Summary Cards -->
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8"
+          >
             <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 card-hover">
-                <div class="flex items-center justify-between">
-                    <div class="min-w-0 flex-1">
-                        <p class="text-gray-500 text-sm font-medium truncate">Total Transactions</p>
-                        <p id="totalTransactions" class="text-2xl sm:text-3xl font-bold text-gray-900">
-                            <span class="loading"></span>
-                        </p>
-                    </div>
-                    <div class="bg-blue-100 p-3 rounded-full flex-shrink-0 ml-4">
-                        <i class="fas fa-exchange-alt text-blue-600 text-xl"></i>
-                    </div>
+              <div class="flex items-center justify-between">
+                <div class="min-w-0 flex-1">
+                  <p class="text-gray-500 text-sm font-medium truncate">
+                    Total Transactions
+                  </p>
+                  <p
+                    id="totalTransactions"
+                    class="text-2xl sm:text-3xl font-bold text-gray-900"
+                  >
+                    <span class="loading"></span>
+                  </p>
                 </div>
-            </div>
-            
-            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 card-hover">
-                <div class="flex items-center justify-between">
-                    <div class="min-w-0 flex-1">
-                        <p class="text-gray-500 text-sm font-medium truncate">Total Volume</p>
-                        <p id="totalVolume" class="text-2xl sm:text-3xl font-bold text-gray-900">
-                            <span class="loading"></span>
-                        </p>
-                    </div>
-                    <div class="bg-green-100 p-3 rounded-full flex-shrink-0 ml-4">
-                        <i class="fas fa-coins text-green-600 text-xl"></i>
-                    </div>
+                <div class="bg-blue-100 p-3 rounded-full flex-shrink-0 ml-4">
+                  <i class="fas fa-exchange-alt text-blue-600 text-xl"></i>
                 </div>
+              </div>
             </div>
-            
-            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 card-hover">
-                <div class="flex items-center justify-between">
-                    <div class="min-w-0 flex-1">
-                        <p class="text-gray-500 text-sm font-medium truncate">Average Transaction</p>
-                        <p id="avgTransaction" class="text-2xl sm:text-3xl font-bold text-gray-900">
-                            <span class="loading"></span>
-                        </p>
-                    </div>
-                    <div class="bg-yellow-100 p-3 rounded-full flex-shrink-0 ml-4">
-                        <i class="fas fa-chart-line text-yellow-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 card-hover">
-                <div class="flex items-center justify-between">
-                    <div class="min-w-0 flex-1">
-                        <p class="text-gray-500 text-sm font-medium truncate">Transaction Types</p>
-                        <p id="transactionTypes" class="text-2xl sm:text-3xl font-bold text-gray-900">
-                            <span class="loading"></span>
-                        </p>
-                    </div>
-                    <div class="bg-purple-100 p-3 rounded-full flex-shrink-0 ml-4">
-                        <i class="fas fa-layer-group text-purple-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Charts Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div class="min-w-0 flex-1">
+                  <p class="text-gray-500 text-sm font-medium truncate">
+                    Total Volume
+                  </p>
+                  <p
+                    id="totalVolume"
+                    class="text-2xl sm:text-3xl font-bold text-gray-900"
+                  >
+                    <span class="loading"></span>
+                  </p>
+                </div>
+                <div class="bg-green-100 p-3 rounded-full flex-shrink-0 ml-4">
+                  <i class="fas fa-coins text-green-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div class="min-w-0 flex-1">
+                  <p class="text-gray-500 text-sm font-medium truncate">
+                    Average Transaction
+                  </p>
+                  <p
+                    id="avgTransaction"
+                    class="text-2xl sm:text-3xl font-bold text-gray-900"
+                  >
+                    <span class="loading"></span>
+                  </p>
+                </div>
+                <div class="bg-yellow-100 p-3 rounded-full flex-shrink-0 ml-4">
+                  <i class="fas fa-chart-line text-yellow-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div class="min-w-0 flex-1">
+                  <p class="text-gray-500 text-sm font-medium truncate">
+                    Transaction Types
+                  </p>
+                  <p
+                    id="transactionTypes"
+                    class="text-2xl sm:text-3xl font-bold text-gray-900"
+                  >
+                    <span class="loading"></span>
+                  </p>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-full flex-shrink-0 ml-4">
+                  <i class="fas fa-layer-group text-purple-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Section -->
+          <div
+            class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8"
+          >
             <!-- Transaction Volume by Type Chart -->
             <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                    <i class="fas fa-chart-pie mr-2"></i>Transaction Volume by Type
-                </h3>
-                <div class="chart-container">
-                    <canvas id="volumeChart"></canvas>
-                </div>
+              <h3 class="text-lg font-semibold mb-4 text-gray-800">
+                <i class="fas fa-chart-pie mr-2"></i>Transaction Volume by Type
+              </h3>
+              <div class="chart-container">
+                <canvas id="volumeChart"></canvas>
+              </div>
             </div>
-            
+
             <!-- Transaction Count by Type Chart -->
             <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                    <i class="fas fa-chart-bar mr-2"></i>Transaction Count by Type
-                </h3>
-                <div class="chart-container">
-                    <canvas id="countChart"></canvas>
-                </div>
+              <h3 class="text-lg font-semibold mb-4 text-gray-800">
+                <i class="fas fa-chart-bar mr-2"></i>Transaction Count by Type
+              </h3>
+              <div class="chart-container">
+                <canvas id="countChart"></canvas>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Monthly Trends Chart -->
-        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+          <!-- Monthly Trends Chart -->
+          <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
             <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                <i class="fas fa-chart-line mr-2"></i>Monthly Transaction Trends
+              <i class="fas fa-chart-line mr-2"></i>Monthly Transaction Trends
             </h3>
-            <div style="height: 350px; min-height: 300px;">
-                <canvas id="trendsChart"></canvas>
+            <div style="height: 350px; min-height: 300px">
+              <canvas id="trendsChart"></canvas>
             </div>
-        </div>
+          </div>
 
-        <!-- Quick Access Links -->
-        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+          <!-- Quick Access Links -->
+          <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
             <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                <i class="fas fa-link mr-2"></i>Quick Access
+              <i class="fas fa-link mr-2"></i>Quick Access
             </h3>
-            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-9 gap-2 sm:gap-3">
-                <a href="/airtime" class="bg-red-50 hover:bg-red-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-phone text-red-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-red-800 truncate w-full">Airtime</p>
-                </a>
-                <a href="/incoming-money" class="bg-green-50 hover:bg-green-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-arrow-down text-green-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-green-800 truncate w-full">Incoming</p>
-                </a>
-                <a href="/transfers-to-mobile" class="bg-blue-50 hover:bg-blue-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-mobile text-blue-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-blue-800 truncate w-full">Transfer</p>
-                </a>
-                <a href="/code-holders" class="bg-purple-50 hover:bg-purple-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-qrcode text-purple-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-purple-800 truncate w-full">Code</p>
-                </a>
-                <a href="/bank-transfers" class="bg-indigo-50 hover:bg-indigo-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-university text-indigo-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-indigo-800 truncate w-full">Bank</p>
-                </a>
-                <a href="/agent-withdrawals" class="bg-yellow-50 hover:bg-yellow-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-user-tie text-yellow-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-yellow-800 truncate w-full">Agent</p>
-                </a>
-                <a href="/internet-voice" class="bg-teal-50 hover:bg-teal-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-wifi text-teal-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-teal-800 truncate w-full">Bundle</p>
-                </a>
-                <a href="/cash-power" class="bg-orange-50 hover:bg-orange-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-bolt text-orange-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-orange-800 truncate w-full">Power</p>
-                </a>
-                <a href="/third-parties" class="bg-pink-50 hover:bg-pink-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0">
-                    <i class="fas fa-handshake text-pink-600 text-lg sm:text-xl mb-1"></i>
-                    <p class="text-xs font-medium text-pink-800 truncate w-full">3rd Party</p>
-                </a>
+            <div
+              class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-9 gap-2 sm:gap-3"
+            >
+              <a
+                href="/airtime"
+                class="bg-red-50 hover:bg-red-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-phone text-red-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-red-800 truncate w-full">
+                  Airtime
+                </p>
+              </a>
+              <a
+                href="/incoming-money"
+                class="bg-green-50 hover:bg-green-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-arrow-down text-green-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-green-800 truncate w-full">
+                  Incoming
+                </p>
+              </a>
+              <a
+                href="/transfers-to-mobile"
+                class="bg-blue-50 hover:bg-blue-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-mobile text-blue-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-blue-800 truncate w-full">
+                  Transfer
+                </p>
+              </a>
+              <a
+                href="/code-holders"
+                class="bg-purple-50 hover:bg-purple-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-qrcode text-purple-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-purple-800 truncate w-full">
+                  Code
+                </p>
+              </a>
+              <a
+                href="/bank-transfers"
+                class="bg-indigo-50 hover:bg-indigo-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-university text-indigo-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-indigo-800 truncate w-full">
+                  Bank
+                </p>
+              </a>
+              <a
+                href="/agent-withdrawals"
+                class="bg-yellow-50 hover:bg-yellow-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-user-tie text-yellow-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-yellow-800 truncate w-full">
+                  Agent
+                </p>
+              </a>
+              <a
+                href="/internet-voice"
+                class="bg-teal-50 hover:bg-teal-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-wifi text-teal-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-teal-800 truncate w-full">
+                  Bundle
+                </p>
+              </a>
+              <a
+                href="/cash-power"
+                class="bg-orange-50 hover:bg-orange-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-bolt text-orange-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-orange-800 truncate w-full">
+                  Power
+                </p>
+              </a>
+              <a
+                href="/third-parties"
+                class="bg-pink-50 hover:bg-pink-100 p-2 sm:p-3 rounded-lg text-center transition-colors flex flex-col items-center min-w-0"
+              >
+                <i
+                  class="fas fa-handshake text-pink-600 text-lg sm:text-xl mb-1"
+                ></i>
+                <p class="text-xs font-medium text-pink-800 truncate w-full">
+                  3rd Party
+                </p>
+              </a>
             </div>
+          </div>
         </div>
-    </div>
 
-    <script>
-        // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
+        <script>
+          // Initialize dashboard
+          document.addEventListener("DOMContentLoaded", function () {
             loadDashboardData();
             setupEventListeners();
-        });
+          });
 
-        let volumeChart, countChart, trendsChart;
-        let allTransactionData = {};
+          let volumeChart, countChart, trendsChart;
+          let allTransactionData = {};
 
-        function setupEventListeners() {
-            document.getElementById('applyFilters').addEventListener('click', applyFilters);
-        }
+          function setupEventListeners() {
+            document
+              .getElementById("applyFilters")
+              .addEventListener("click", applyFilters);
+          }
 
-        async function loadDashboardData() {
+          async function loadDashboardData() {
             try {
-                // Load data for all transaction types
-                const transactionTypes = [
-                    'airtime_payments', 'incoming_money', 'transfers_to_mobile_numbers',
-                    'payments_to_code_holders', 'bank_transfers', 'bundle_purchases',
-                    'cashpower_payments', 'third_party_transactions', 'withdrawals_from_agents'
-                ];
+              // Load data for all transaction types
+              const transactionTypes = [
+                "airtime_payments",
+                "incoming_money",
+                "transfers_to_mobile_numbers",
+                "payments_to_code_holders",
+                "bank_transfers",
+                "bundle_purchases",
+                "cashpower_payments",
+                "third_party_transactions",
+                "withdrawals_from_agents",
+              ];
 
-                for (const type of transactionTypes) {
-                    const response = await fetch(`/get-${type.replace(/_/g, '-')}`);
-                    if (response.ok) {
-                        allTransactionData[type] = await response.json();
-                    }
+              for (const type of transactionTypes) {
+                const response = await fetch(`/get-${type.replace(/_/g, "-")}`);
+                if (response.ok) {
+                  allTransactionData[type] = await response.json();
                 }
+              }
 
-                updateSummaryCards();
-                createCharts();
+              updateSummaryCards();
+              createCharts();
             } catch (error) {
-                console.error('Error loading dashboard data:', error);
+              console.error("Error loading dashboard data:", error);
             }
-        }
+          }
 
-        function updateSummaryCards() {
+          function updateSummaryCards() {
             let totalTransactions = 0;
             let totalVolume = 0;
             const typeCount = Object.keys(allTransactionData).length;
 
-            Object.values(allTransactionData).forEach(data => {
-                totalTransactions += data.length;
-                data.forEach(transaction => {
-                    totalVolume += transaction.amount || 0;
-                });
+            Object.values(allTransactionData).forEach((data) => {
+              totalTransactions += data.length;
+              data.forEach((transaction) => {
+                totalVolume += transaction.amount || 0;
+              });
             });
 
-            const avgTransaction = totalTransactions > 0 ? Math.round(totalVolume / totalTransactions) : 0;
+            const avgTransaction =
+              totalTransactions > 0
+                ? Math.round(totalVolume / totalTransactions)
+                : 0;
 
-            document.getElementById('totalTransactions').textContent = totalTransactions.toLocaleString();
-            document.getElementById('totalVolume').textContent = `${totalVolume.toLocaleString()} RWF`;
-            document.getElementById('avgTransaction').textContent = `${avgTransaction.toLocaleString()} RWF`;
-            document.getElementById('transactionTypes').textContent = typeCount;
-        }
+            document.getElementById("totalTransactions").textContent =
+              totalTransactions.toLocaleString();
+            document.getElementById(
+              "totalVolume"
+            ).textContent = `${totalVolume.toLocaleString()} RWF`;
+            document.getElementById(
+              "avgTransaction"
+            ).textContent = `${avgTransaction.toLocaleString()} RWF`;
+            document.getElementById("transactionTypes").textContent = typeCount;
+          }
 
-        function createCharts() {
+          function createCharts() {
             createVolumeChart();
             createCountChart();
             createTrendsChart();
-        }
+          }
 
-        function createVolumeChart() {
-            const ctx = document.getElementById('volumeChart').getContext('2d');
-            
+          function createVolumeChart() {
+            const ctx = document.getElementById("volumeChart").getContext("2d");
+
             const labels = [];
             const data = [];
             const colors = [
-                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
-                '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#FF6384'
+              "#FF6384",
+              "#36A2EB",
+              "#FFCE56",
+              "#4BC0C0",
+              "#9966FF",
+              "#FF9F40",
+              "#FF6384",
+              "#C9CBCF",
+              "#4BC0C0",
+              "#FF6384",
             ];
 
-            Object.entries(allTransactionData).forEach(([type, transactions]) => {
-                const volume = transactions.reduce((sum, t) => sum + (t.amount || 0), 0);
-                labels.push(type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+            Object.entries(allTransactionData).forEach(
+              ([type, transactions]) => {
+                const volume = transactions.reduce(
+                  (sum, t) => sum + (t.amount || 0),
+                  0
+                );
+                labels.push(
+                  type
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (l) => l.toUpperCase())
+                );
                 data.push(volume);
-            });
+              }
+            );
 
             volumeChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors,
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
+              type: "pie",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        return (
+                          context.label +
+                          ": " +
+                          context.parsed.toLocaleString() +
+                          " RWF"
+                        );
+                      },
+                    },
+                  },
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.parsed.toLocaleString() + ' RWF';
-                                }
-                            }
-                        }
-                    }
-                }
+              },
             });
-        }
+          }
 
-        function createCountChart() {
-            const ctx = document.getElementById('countChart').getContext('2d');
-            
+          function createCountChart() {
+            const ctx = document.getElementById("countChart").getContext("2d");
+
             const labels = [];
             const data = [];
 
-            Object.entries(allTransactionData).forEach(([type, transactions]) => {
-                labels.push(type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+            Object.entries(allTransactionData).forEach(
+              ([type, transactions]) => {
+                labels.push(
+                  type
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (l) => l.toUpperCase())
+                );
                 data.push(transactions.length);
-            });
+              }
+            );
 
             countChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Number of Transactions',
-                        data: data,
-                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
+              type: "bar",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Number of Transactions",
+                    data: data,
+                    backgroundColor: "rgba(54, 162, 235, 0.8)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
             });
-        }
+          }
 
-        function createTrendsChart() {
-            const ctx = document.getElementById('trendsChart').getContext('2d');
-            
+          function createTrendsChart() {
+            const ctx = document.getElementById("trendsChart").getContext("2d");
+
             // Aggregate data by month
             const monthlyData = {};
-            
-            Object.entries(allTransactionData).forEach(([type, transactions]) => {
-                transactions.forEach(t => {
-                    if (t.date) {
-                        const month = t.date.substring(0, 7); // YYYY-MM
-                        if (!monthlyData[month]) {
-                            monthlyData[month] = { count: 0, volume: 0 };
-                        }
-                        monthlyData[month].count++;
-                        monthlyData[month].volume += t.amount || 0;
+
+            Object.entries(allTransactionData).forEach(
+              ([type, transactions]) => {
+                transactions.forEach((t) => {
+                  if (t.date) {
+                    const month = t.date.substring(0, 7); // YYYY-MM
+                    if (!monthlyData[month]) {
+                      monthlyData[month] = { count: 0, volume: 0 };
                     }
+                    monthlyData[month].count++;
+                    monthlyData[month].volume += t.amount || 0;
+                  }
                 });
-            });
+              }
+            );
 
             const sortedMonths = Object.keys(monthlyData).sort();
-            const countData = sortedMonths.map(month => monthlyData[month].count);
-            const volumeData = sortedMonths.map(month => monthlyData[month].volume);
+            const countData = sortedMonths.map(
+              (month) => monthlyData[month].count
+            );
+            const volumeData = sortedMonths.map(
+              (month) => monthlyData[month].volume
+            );
 
             trendsChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: sortedMonths,
-                    datasets: [{
-                        label: 'Transaction Count',
-                        data: countData,
-                        borderColor: 'rgb(75, 192, 192)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        yAxisID: 'y'
-                    }, {
-                        label: 'Transaction Volume (RWF)',
-                        data: volumeData,
-                        borderColor: 'rgb(255, 99, 132)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        yAxisID: 'y1'
-                    }]
+              type: "line",
+              data: {
+                labels: sortedMonths,
+                datasets: [
+                  {
+                    label: "Transaction Count",
+                    data: countData,
+                    borderColor: "rgb(75, 192, 192)",
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    yAxisID: "y",
+                  },
+                  {
+                    label: "Transaction Volume (RWF)",
+                    data: volumeData,
+                    borderColor: "rgb(255, 99, 132)",
+                    backgroundColor: "rgba(255, 99, 132, 0.2)",
+                    yAxisID: "y1",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                  mode: "index",
+                  intersect: false,
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
+                scales: {
+                  x: {
+                    display: true,
+                    title: {
+                      display: true,
+                      text: "Month",
                     },
-                    scales: {
-                        x: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Month'
-                            }
-                        },
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'Transaction Count'
-                            }
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: 'Volume (RWF)'
-                            },
-                            grid: {
-                                drawOnChartArea: false,
-                            },
-                        }
-                    }
-                }
+                  },
+                  y: {
+                    type: "linear",
+                    display: true,
+                    position: "left",
+                    title: {
+                      display: true,
+                      text: "Transaction Count",
+                    },
+                  },
+                  y1: {
+                    type: "linear",
+                    display: true,
+                    position: "right",
+                    title: {
+                      display: true,
+                      text: "Volume (RWF)",
+                    },
+                    grid: {
+                      drawOnChartArea: false,
+                    },
+                  },
+                },
+              },
             });
-        }
+          }
 
-        function applyFilters() {
+          function applyFilters() {
             // This function would implement the filtering logic
             // For now, it's a placeholder
-            alert('Filter functionality will be implemented based on selected criteria');
-        }
+            alert(
+              "Filter functionality will be implemented based on selected criteria"
+            );
+          }
 
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuIcon = document.getElementById('menu-icon');
-            
-            mobileMenu.classList.toggle('hidden');
-            menuIcon.classList.toggle('fa-bars');
-            menuIcon.classList.toggle('fa-times');
-        }
-    </script>
-        </main>
+          function toggleMobileMenu() {
+            const mobileMenu = document.getElementById("mobile-menu");
+            const menuIcon = document.getElementById("menu-icon");
+
+            mobileMenu.classList.toggle("hidden");
+            menuIcon.classList.toggle("fa-bars");
+            menuIcon.classList.toggle("fa-times");
+          }
+        </script>
+      </main>
     </div>
-</body>
+  </body>
 </html>

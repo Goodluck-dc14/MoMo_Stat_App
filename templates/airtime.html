@@ -1,432 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Airtime Payments - MTN MoMo Analytics</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .card-hover {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        .table-row:hover {
-            background-color: #f8fafc;
-        }
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
-        }
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .card-hover {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+      .card-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+      .table-row:hover {
+        background-color: #f8fafc;
+      }
+      .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+      }
     </style>
-</head>
-<body class="bg-gray-100">
+  </head>
+  <body class="bg-gray-100">
     <!-- Navigation -->
     <nav class="gradient-bg shadow-lg">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-4">
-                    <i class="fas fa-phone text-white text-2xl"></i>
-                    <h1 class="text-white text-xl font-bold">Airtime Payments</h1>
-                </div>
-                <a href="/" class="text-white hover:text-blue-200 transition-colors">
-                    <i class="fas fa-home mr-2"></i>Back to Dashboard
-                </a>
-            </div>
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center space-x-4">
+            <i class="fas fa-phone text-white text-2xl"></i>
+            <h1 class="text-white text-xl font-bold">Airtime Payments</h1>
+          </div>
+          <a href="/" class="text-white hover:text-blue-200 transition-colors">
+            <i class="fas fa-home mr-2"></i>Back to Dashboard
+          </a>
         </div>
+      </div>
     </nav>
 
     <!-- Main Container -->
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg min-h-screen sticky top-0" id="sidebar">
-            <div class="flex items-center justify-between p-4 border-b">
-                <h2 class="text-lg font-semibold text-gray-800">Navigation</h2>
-            </div>
-            <nav class="mt-4">
-                <a href="/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-home mr-3"></i>
-                    Dashboard
-                </a>
-                <a href="/airtime" class="flex items-center px-4 py-3 text-white bg-blue-600 border-r-4 border-blue-800 transition-colors">
-                    <i class="fas fa-mobile-alt mr-3"></i>
-                    Airtime Payments
-                </a>
-                <a href="/incoming-money" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-arrow-down mr-3"></i>
-                    Incoming Money
-                </a>
-                <a href="/transfers-to-mobile" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-paper-plane mr-3"></i>
-                    Mobile Transfers
-                </a>
-                <a href="/code-holders" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-qrcode mr-3"></i>
-                    Code Payments
-                </a>
-                <a href="/bank-transfers" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-university mr-3"></i>
-                    Bank Transfers
-                </a>
-                <a href="/internet-voice" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-wifi mr-3"></i>
-                    Internet/Voice Bundles
-                </a>
-                <a href="/cash-power" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-bolt mr-3"></i>
-                    CashPower
-                </a>
-                <a href="/third-parties" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-handshake mr-3"></i>
-                    Third Party
-                </a>
-                <a href="/agent-withdrawals" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-hand-holding-usd mr-3"></i>
-                    Agent Withdrawals
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Mobile sidebar overlay -->
-        
-        <!-- Main Content -->
-        <main class="flex-1">
-            <div class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Total Transactions</p>
-                        <p id="totalCount" class="text-3xl font-bold text-gray-900">{{ transactions|length }}</p>
-                    </div>
-                    <div class="bg-red-100 p-3 rounded-full">
-                        <i class="fas fa-receipt text-red-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Total Amount</p>
-                        <p id="totalAmount" class="text-3xl font-bold text-gray-900">
-                            {% set total_amount = transactions|sum(attribute='amount') %}
-                            {{ "{:,}".format(total_amount) }} RWF
-                        </p>
-                    </div>
-                    <div class="bg-green-100 p-3 rounded-full">
-                        <i class="fas fa-coins text-green-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Total Fees</p>
-                        <p id="totalFees" class="text-3xl font-bold text-gray-900">
-                            {% set total_fees = transactions|sum(attribute='fee') %}
-                            {{ "{:,}".format(total_fees) }} RWF
-                        </p>
-                    </div>
-                    <div class="bg-yellow-100 p-3 rounded-full">
-                        <i class="fas fa-percentage text-yellow-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Average Amount</p>
-                        <p id="avgAmount" class="text-3xl font-bold text-gray-900">
-                            {% if transactions|length > 0 %}
-                                {% set avg_amount = (transactions|sum(attribute='amount') / transactions|length)|round|int %}
-                                {{ "{:,}".format(avg_amount) }} RWF
-                            {% else %}
-                                0 RWF
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div class="bg-blue-100 p-3 rounded-full">
-                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
+      <!-- Sidebar -->
+      <aside
+        class="w-64 bg-white shadow-lg min-h-screen sticky top-0"
+        id="sidebar"
+      >
+        <div class="flex items-center justify-between p-4 border-b">
+          <h2 class="text-lg font-semibold text-gray-800">Navigation</h2>
         </div>
+        <nav class="mt-4">
+          <a
+            href="/"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-home mr-3"></i>
+            Dashboard
+          </a>
+          <a
+            href="/airtime"
+            class="flex items-center px-4 py-3 text-white bg-blue-600 border-r-4 border-blue-800 transition-colors"
+          >
+            <i class="fas fa-mobile-alt mr-3"></i>
+            Airtime Payments
+          </a>
+          <a
+            href="/incoming-money"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-arrow-down mr-3"></i>
+            Incoming Money
+          </a>
+          <a
+            href="/transfers-to-mobile"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-paper-plane mr-3"></i>
+            Mobile Transfers
+          </a>
+          <a
+            href="/code-holders"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-qrcode mr-3"></i>
+            Code Payments
+          </a>
+          <a
+            href="/bank-transfers"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-university mr-3"></i>
+            Bank Transfers
+          </a>
+          <a
+            href="/internet-voice"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-wifi mr-3"></i>
+            Internet/Voice Bundles
+          </a>
+          <a
+            href="/cash-power"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-bolt mr-3"></i>
+            CashPower
+          </a>
+          <a
+            href="/third-parties"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-handshake mr-3"></i>
+            Third Party
+          </a>
+          <a
+            href="/agent-withdrawals"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-hand-holding-usd mr-3"></i>
+            Agent Withdrawals
+          </a>
+        </nav>
+      </aside>
 
-        <!-- Search and Filter -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <!-- Mobile sidebar overlay -->
+
+      <!-- Main Content -->
+      <main class="flex-1">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+          <!-- Summary Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 text-sm font-medium">
+                    Total Transactions
+                  </p>
+                  <p id="totalCount" class="text-3xl font-bold text-gray-900">
+                    {{ transactions|length }}
+                  </p>
+                </div>
+                <div class="bg-red-100 p-3 rounded-full">
+                  <i class="fas fa-receipt text-red-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 text-sm font-medium">Total Amount</p>
+                  <p id="totalAmount" class="text-3xl font-bold text-gray-900">
+                    {% set total_amount = transactions|sum(attribute='amount')
+                    %} {{ "{:,}".format(total_amount) }} RWF
+                  </p>
+                </div>
+                <div class="bg-green-100 p-3 rounded-full">
+                  <i class="fas fa-coins text-green-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 text-sm font-medium">Total Fees</p>
+                  <p id="totalFees" class="text-3xl font-bold text-gray-900">
+                    {% set total_fees = transactions|sum(attribute='fee') %} {{
+                    "{:,}".format(total_fees) }} RWF
+                  </p>
+                </div>
+                <div class="bg-yellow-100 p-3 rounded-full">
+                  <i class="fas fa-percentage text-yellow-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 text-sm font-medium">
+                    Average Amount
+                  </p>
+                  <p id="avgAmount" class="text-3xl font-bold text-gray-900">
+                    {% if transactions|length > 0 %} {% set avg_amount =
+                    (transactions|sum(attribute='amount') /
+                    transactions|length)|round|int %} {{
+                    "{:,}".format(avg_amount) }} RWF {% else %} 0 RWF {% endif
+                    %}
+                  </p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-full">
+                  <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search and Filter -->
+          <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                <i class="fas fa-search mr-2"></i>Search & Filter
+              <i class="fas fa-search mr-2"></i>Search & Filter
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <input type="text" id="searchInput" placeholder="Search by transaction ID or amount..." 
-                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <input type="date" id="dateFilter" 
-                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <button id="clearFilters" class="w-full bg-gray-600 text-white p-3 rounded-lg hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-times mr-2"></i>Clear Filters
-                    </button>
-                </div>
+              <div>
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Search by transaction ID or amount..."
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <input
+                  type="date"
+                  id="dateFilter"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <button
+                  id="clearFilters"
+                  class="w-full bg-gray-600 text-white p-3 rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  <i class="fas fa-times mr-2"></i>Clear Filters
+                </button>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Chart Section -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+          <!-- Chart Section -->
+          <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                <i class="fas fa-chart-bar mr-2"></i>Daily Transaction Volume
+              <i class="fas fa-chart-bar mr-2"></i>Daily Transaction Volume
             </h3>
             <div class="chart-container">
-                <canvas id="dailyChart"></canvas>
+              <canvas id="dailyChart"></canvas>
             </div>
-        </div>
+          </div>
 
-        <!-- Transactions Table -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <!-- Transactions Table -->
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    <i class="fas fa-table mr-2"></i>Airtime Payment Transactions
-                </h3>
+              <h3 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-table mr-2"></i>Airtime Payment Transactions
+              </h3>
             </div>
-            
+
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200" id="transactionsTable">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Transaction ID
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Amount
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Fee
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Date
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                New Balance
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
-                        {% for transaction in transactions %}
-                        <tr class="table-row" data-id="{{ transaction.transaction_id }}">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ transaction.transaction_id }}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 font-semibold">{{ "{:,}".format(transaction.amount) }} RWF</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ "{:,}".format(transaction.fee) }} RWF</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ transaction.date }}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ "{:,}".format(transaction.new_balance) }} RWF</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button onclick="viewDetails('{{ transaction.transaction_id }}')" 
-                                        class="text-blue-600 hover:text-blue-900 mr-3">
-                                    <i class="fas fa-eye"></i> View
-                                </button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+              <table
+                class="min-w-full divide-y divide-gray-200"
+                id="transactionsTable"
+              >
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Transaction ID
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Amount
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Fee
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Date
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      New Balance
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
+                  {% for transaction in transactions %}
+                  <tr
+                    class="table-row"
+                    data-id="{{ transaction.transaction_id }}"
+                  >
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">
+                        {{ transaction.transaction_id }}
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900 font-semibold">
+                        {{ "{:,}".format(transaction.amount) }} RWF
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        {{ "{:,}".format(transaction.fee) }} RWF
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        {{ transaction.date }}
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        {{ "{:,}".format(transaction.new_balance) }} RWF
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button
+                        onclick="viewDetails('{{ transaction.transaction_id }}')"
+                        class="text-blue-600 hover:text-blue-900 mr-3"
+                      >
+                        <i class="fas fa-eye"></i> View
+                      </button>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
-    </div>
 
-    <!-- Transaction Details Modal -->
-    <div id="detailsModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
-        <div class="flex items-center justify-center min-h-screen p-4">
+        <!-- Transaction Details Modal -->
+        <div
+          id="detailsModal"
+          class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50"
+        >
+          <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-800">Transaction Details</h3>
-                </div>
-                <div id="modalContent" class="px-6 py-4">
-                    <!-- Content will be populated by JavaScript -->
-                </div>
-                <div class="px-6 py-4 border-t border-gray-200 text-right">
-                    <button onclick="closeModal()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
-                        Close
-                    </button>
-                </div>
+              <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800">
+                  Transaction Details
+                </h3>
+              </div>
+              <div id="modalContent" class="px-6 py-4">
+                <!-- Content will be populated by JavaScript -->
+              </div>
+              <div class="px-6 py-4 border-t border-gray-200 text-right">
+                <button
+                  onclick="closeModal()"
+                  class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+                >
+                  Close
+                </button>
+              </div>
             </div>
+          </div>
         </div>
+
+        <script>
+          let allTransactions = {{ transactions|tojson }};
+          let dailyChart;
+
+          document.addEventListener('DOMContentLoaded', function() {
+              setupEventListeners();
+              createDailyChart();
+          });
+
+          function setupEventListeners() {
+              document.getElementById('searchInput').addEventListener('input', filterTransactions);
+              document.getElementById('dateFilter').addEventListener('change', filterTransactions);
+              document.getElementById('clearFilters').addEventListener('click', clearFilters);
+          }
+
+          function createDailyChart() {
+              const ctx = document.getElementById('dailyChart').getContext('2d');
+
+              // Group transactions by date
+              const dailyData = {};
+              allTransactions.forEach(transaction => {
+                  const date = transaction.date.split(' ')[0]; // Get date part only
+                  if (!dailyData[date]) {
+                      dailyData[date] = { count: 0, amount: 0 };
+                  }
+                  dailyData[date].count++;
+                  dailyData[date].amount += transaction.amount;
+              });
+
+              const sortedDates = Object.keys(dailyData).sort();
+              const amounts = sortedDates.map(date => dailyData[date].amount);
+              const counts = sortedDates.map(date => dailyData[date].count);
+
+              dailyChart = new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                      labels: sortedDates,
+                      datasets: [{
+                          label: 'Daily Amount (RWF)',
+                          data: amounts,
+                          borderColor: 'rgb(239, 68, 68)',
+                          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                          tension: 0.1,
+                          yAxisID: 'y'
+                      }, {
+                          label: 'Daily Count',
+                          data: counts,
+                          borderColor: 'rgb(59, 130, 246)',
+                          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                          tension: 0.1,
+                          yAxisID: 'y1'
+                      }]
+                  },
+                  options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      scales: {
+                          y: {
+                              type: 'linear',
+                              display: true,
+                              position: 'left',
+                              title: {
+                                  display: true,
+                                  text: 'Amount (RWF)'
+                              }
+                          },
+                          y1: {
+                              type: 'linear',
+                              display: true,
+                              position: 'right',
+                              title: {
+                                  display: true,
+                                  text: 'Transaction Count'
+                              },
+                              grid: {
+                                  drawOnChartArea: false,
+                              },
+                          }
+                      }
+                  }
+              });
+          }
+
+          function filterTransactions() {
+              const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+              const dateFilter = document.getElementById('dateFilter').value;
+
+              const rows = document.querySelectorAll('#tableBody tr');
+
+              rows.forEach(row => {
+                  const transactionId = row.cells[0].textContent.toLowerCase();
+                  const amount = row.cells[1].textContent.toLowerCase();
+                  const date = row.cells[3].textContent;
+
+                  const matchesSearch = transactionId.includes(searchTerm) || amount.includes(searchTerm);
+                  const matchesDate = !dateFilter || date.includes(dateFilter);
+
+                  if (matchesSearch && matchesDate) {
+                      row.style.display = '';
+                  } else {
+                      row.style.display = 'none';
+                  }
+              });
+          }
+
+          function clearFilters() {
+              document.getElementById('searchInput').value = '';
+              document.getElementById('dateFilter').value = '';
+              filterTransactions();
+          }
+
+          function viewDetails(transactionId) {
+              const transaction = allTransactions.find(t => t.transaction_id === transactionId);
+              if (transaction) {
+                  const content = `
+                      <div class="space-y-3">
+                          <div class="flex justify-between">
+                              <span class="font-medium text-gray-700">Transaction ID:</span>
+                              <span class="text-gray-900">${transaction.transaction_id}</span>
+                          </div>
+                          <div class="flex justify-between">
+                              <span class="font-medium text-gray-700">Amount:</span>
+                              <span class="text-gray-900 font-semibold">${transaction.amount.toLocaleString()} RWF</span>
+                          </div>
+                          <div class="flex justify-between">
+                              <span class="font-medium text-gray-700">Fee:</span>
+                              <span class="text-gray-900">${transaction.fee.toLocaleString()} RWF</span>
+                          </div>
+                          <div class="flex justify-between">
+                              <span class="font-medium text-gray-700">Date:</span>
+                              <span class="text-gray-900">${transaction.date}</span>
+                          </div>
+                          <div class="flex justify-between">
+                              <span class="font-medium text-gray-700">New Balance:</span>
+                              <span class="text-gray-900">${transaction.new_balance.toLocaleString()} RWF</span>
+                          </div>
+                      </div>
+                  `;
+                  document.getElementById('modalContent').innerHTML = content;
+                  document.getElementById('detailsModal').classList.remove('hidden');
+              }
+          }
+
+          function closeModal() {
+              document.getElementById('detailsModal').classList.add('hidden');
+          }
+        </script>
+      </main>
     </div>
-
-    <script>
-        let allTransactions = {{ transactions|tojson }};
-        let dailyChart;
-
-        document.addEventListener('DOMContentLoaded', function() {
-            setupEventListeners();
-            createDailyChart();
-        });
-
-        function setupEventListeners() {
-            document.getElementById('searchInput').addEventListener('input', filterTransactions);
-            document.getElementById('dateFilter').addEventListener('change', filterTransactions);
-            document.getElementById('clearFilters').addEventListener('click', clearFilters);
-        }
-
-        function createDailyChart() {
-            const ctx = document.getElementById('dailyChart').getContext('2d');
-            
-            // Group transactions by date
-            const dailyData = {};
-            allTransactions.forEach(transaction => {
-                const date = transaction.date.split(' ')[0]; // Get date part only
-                if (!dailyData[date]) {
-                    dailyData[date] = { count: 0, amount: 0 };
-                }
-                dailyData[date].count++;
-                dailyData[date].amount += transaction.amount;
-            });
-
-            const sortedDates = Object.keys(dailyData).sort();
-            const amounts = sortedDates.map(date => dailyData[date].amount);
-            const counts = sortedDates.map(date => dailyData[date].count);
-
-            dailyChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: sortedDates,
-                    datasets: [{
-                        label: 'Daily Amount (RWF)',
-                        data: amounts,
-                        borderColor: 'rgb(239, 68, 68)',
-                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                        tension: 0.1,
-                        yAxisID: 'y'
-                    }, {
-                        label: 'Daily Count',
-                        data: counts,
-                        borderColor: 'rgb(59, 130, 246)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        tension: 0.1,
-                        yAxisID: 'y1'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'Amount (RWF)'
-                            }
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: 'Transaction Count'
-                            },
-                            grid: {
-                                drawOnChartArea: false,
-                            },
-                        }
-                    }
-                }
-            });
-        }
-
-        function filterTransactions() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const dateFilter = document.getElementById('dateFilter').value;
-            
-            const rows = document.querySelectorAll('#tableBody tr');
-            
-            rows.forEach(row => {
-                const transactionId = row.cells[0].textContent.toLowerCase();
-                const amount = row.cells[1].textContent.toLowerCase();
-                const date = row.cells[3].textContent;
-                
-                const matchesSearch = transactionId.includes(searchTerm) || amount.includes(searchTerm);
-                const matchesDate = !dateFilter || date.includes(dateFilter);
-                
-                if (matchesSearch && matchesDate) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-
-        function clearFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('dateFilter').value = '';
-            filterTransactions();
-        }
-
-        function viewDetails(transactionId) {
-            const transaction = allTransactions.find(t => t.transaction_id === transactionId);
-            if (transaction) {
-                const content = `
-                    <div class="space-y-3">
-                        <div class="flex justify-between">
-                            <span class="font-medium text-gray-700">Transaction ID:</span>
-                            <span class="text-gray-900">${transaction.transaction_id}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="font-medium text-gray-700">Amount:</span>
-                            <span class="text-gray-900 font-semibold">${transaction.amount.toLocaleString()} RWF</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="font-medium text-gray-700">Fee:</span>
-                            <span class="text-gray-900">${transaction.fee.toLocaleString()} RWF</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="font-medium text-gray-700">Date:</span>
-                            <span class="text-gray-900">${transaction.date}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="font-medium text-gray-700">New Balance:</span>
-                            <span class="text-gray-900">${transaction.new_balance.toLocaleString()} RWF</span>
-                        </div>
-                    </div>
-                `;
-                document.getElementById('modalContent').innerHTML = content;
-                document.getElementById('detailsModal').classList.remove('hidden');
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('detailsModal').classList.add('hidden');
-        }
-    </script>
-        </main>
-    </div>
-</body>
+  </body>
 </html>

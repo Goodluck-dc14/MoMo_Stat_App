@@ -27,24 +27,28 @@ Raw XML Data → Python Parser → SQLite Database → Flask API → Interactive
 ## 🛠️ Tech Stack
 
 **Backend**
+
 - Python 3.9 with Flask framework
 - SQLite for data storage
 - xml.etree.ElementTree for XML parsing
 - Regular expressions for data cleaning
 
 **Frontend**
+
 - HTML5, CSS3, Tailwind CSS
 - Vanilla JavaScript (ES6+)
 - Chart.js for data visualizations
 - Font Awesome icons
 
 **Tools**
+
 - Git for version control
 - Virtual environment for dependency management
 
 ## � Getting Started
 
 **What you need:**
+
 - Python 3.9+
 - Git
 - Any modern web browser
@@ -52,28 +56,33 @@ Raw XML Data → Python Parser → SQLite Database → Flask API → Interactive
 **Installation:**
 
 1. **Clone and navigate to the project**
+
    ```bash
    git clone https://github.com/Goodluck-dc14/MoMo_Stat_App.git
    cd MoMo_Stat_App
    ```
 
 2. **Set up virtual environment**
+
    ```bash
    python3 -m venv env
    source env/bin/activate  # Windows: env\Scripts\activate
    ```
 
 3. **Install dependencies**
+
    ```bash
    pip install flask lxml
    ```
 
 4. **Parse the data and create database**
+
    ```bash
    python new-parser.py
    ```
 
 5. **Run the application**
+
    ```bash
    python app.py
    ```
@@ -103,6 +112,7 @@ CREATE TABLE incoming_money (
 ```
 
 Each table has:
+
 - Primary key for unique identification
 - Transaction ID to prevent duplicates
 - Amount and balance information
@@ -112,16 +122,18 @@ Each table has:
 ## � Features
 
 **Dashboard Overview**
+
 - Summary cards showing total transactions and amounts for each category
-- Pie chart showing transaction distribution by type  
+- Pie chart showing transaction distribution by type
 - Monthly trend analysis with line charts
 - Responsive design that works on desktop and mobile
 
 **Transaction Categories**
 The system processes 9 different types of mobile money transactions:
+
 - Airtime payments (mobile credit)
 - Incoming money transfers
-- Transfers to mobile numbers  
+- Transfers to mobile numbers
 - Payments to code holders
 - Bank transfers
 - Internet/voice bundle purchases
@@ -130,12 +142,14 @@ The system processes 9 different types of mobile money transactions:
 - Agent withdrawals
 
 **Navigation & Filtering**
+
 - Static sidebar with all transaction categories
 - Active page highlighting so you know where you are
 - Search and filter by transaction type, date range, and amount
 - Individual detail pages for each transaction type
 
 **Data Processing**
+
 - Parses 1,600+ SMS messages from XML format
 - Uses regex patterns to extract transaction details
 - Handles data cleaning and validation
@@ -166,6 +180,7 @@ GET /get-incoming-money                # Returns incoming money data as JSON
 ## 📋 Project Files
 
 **Core Files:**
+
 - `app.py` - Main Flask application with routes and API endpoints
 - `new-parser.py` - XML parser that processes SMS data and populates database
 - `db.py` - Database connection and helper functions
@@ -173,12 +188,14 @@ GET /get-incoming-money                # Returns incoming money data as JSON
 - `momo_data.db` - SQLite database with processed transactions
 
 **Templates:**
+
 - `templates/index.html` - Main dashboard with charts and summary cards
 - `templates/airtime.html` - Airtime payments detail page
 - `templates/incoming-money.html` - Incoming money transactions page
 - And 7 other transaction-specific pages
 
 **Data:**
+
 - `data/` folder contains JSON files with sample data for each transaction type
 
 ## 💡 Technical Challenges Solved
@@ -192,11 +209,12 @@ GET /get-incoming-money                # Returns incoming money data as JSON
 **Responsive Navigation**: Implemented a static sidebar that works on both desktop and mobile
 
 **Error Handling**: Added comprehensive logging for SMS messages that couldn't be parsed
+
 ## 🎯 Assignment Requirements Met
 
 **Data Processing** - Parsed 1600+ SMS messages from XML, categorized into 9 transaction types
 
-**Database Design** - Created normalized SQLite database with proper relationships and constraints  
+**Database Design** - Created normalized SQLite database with proper relationships and constraints
 
 **Frontend Development** - Built responsive dashboard with Chart.js visualizations and real-time filtering
 
@@ -211,14 +229,15 @@ GET /get-incoming-money                # Returns incoming money data as JSON
 ## 🔮 Future Improvements
 
 - Add user authentication and role-based access
-- Implement real-time data updates with WebSockets  
+- Implement real-time data updates with WebSockets
 - Create PDF export functionality for reports
 - Add machine learning for fraud detection
 - Build mobile app version with React Native
 
 ## �‍💻 About Me
 
-**Goodluck DC** - Full Stack Developer  
+**Goodluck DC** - Full Stack Developer
+
 - GitHub: [@Goodluck-dc14](https://github.com/Goodluck-dc14)
 - Email: [your.email@example.com]
 

@@ -504,3 +504,18 @@
 2025-07-29 18:50:46,816 - INFO - 127.0.0.1 - - [29/Jul/2025 18:50:46] "GET /airtime HTTP/1.1" 200 -
 2025-07-29 18:50:47,880 - INFO - 127.0.0.1 - - [29/Jul/2025 18:50:47] "GET /code-holders HTTP/1.1" 200 -
 2025-07-29 18:50:49,716 - INFO - 127.0.0.1 - - [29/Jul/2025 18:50:49] "GET /internet-voice HTTP/1.1" 200 -
+2025-07-29 19:43:43,673 - INFO -  * Detected change in '/Users/sheisgoodluck/Documents/MoMo_Stat_App/app.py', reloading
+2025-07-29 19:43:43,710 - INFO -  * Restarting with stat
+2025-07-29 19:43:44,363 - WARNING -  * Debugger is active!
+2025-07-29 19:43:44,379 - INFO -  * Debugger PIN: 202-890-421
+2025-07-29 19:44:09,904 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:09] "GET /internet-voice HTTP/1.1" 200 -
+2025-07-29 19:44:12,008 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET / HTTP/1.1" 200 -
+2025-07-29 19:44:12,086 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-airtime-payments HTTP/1.1" 200 -
+2025-07-29 19:44:12,117 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-incoming-money HTTP/1.1" 200 -
+2025-07-29 19:44:12,140 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-transfers-to-mobile-numbers HTTP/1.1" 200 -
+2025-07-29 19:44:12,151 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-payments-to-code-holders HTTP/1.1" 200 -
+2025-07-29 19:44:12,158 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-bank-transfers HTTP/1.1" 200 -
+2025-07-29 19:44:12,163 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-bundle-purchases HTTP/1.1" 200 -
+2025-07-29 19:44:12,169 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-cashpower-payments HTTP/1.1" 200 -
+2025-07-29 19:44:12,176 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-third-party-transactions HTTP/1.1" 200 -
+2025-07-29 19:44:12,182 - INFO - 127.0.0.1 - - [29/Jul/2025 19:44:12] "GET /get-withdrawals-from-agents HTTP/1.1" 200 -

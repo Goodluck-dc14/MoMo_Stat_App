@@ -1,118 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MoMo Transaction Details</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
     </style>
-</head>
-<body class="bg-gray-100">
+  </head>
+  <body class="bg-gray-100">
     <!-- Navigation -->
     <nav class="gradient-bg shadow-lg">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-4">
-                    <i class="fas fa-mobile-alt text-white text-2xl"></i>
-                    <h1 class="text-white text-xl font-bold">MTN MoMo Analytics</h1>
-                </div>
-                <div class="text-white text-sm">
-                    <a href="/" class="hover:text-gray-200">← Back to Dashboard</a>
-                </div>
-            </div>
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center space-x-4">
+            <i class="fas fa-mobile-alt text-white text-2xl"></i>
+            <h1 class="text-white text-xl font-bold">MTN MoMo Analytics</h1>
+          </div>
+          <div class="text-white text-sm">
+            <a href="/" class="hover:text-gray-200">← Back to Dashboard</a>
+          </div>
         </div>
+      </div>
     </nav>
 
     <!-- Main Container -->
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg min-h-screen sticky top-0" id="sidebar">
-            <div class="flex items-center justify-between p-4 border-b">
-                <h2 class="text-lg font-semibold text-gray-800">Navigation</h2>
-            </div>
-            <nav class="mt-4">
-                <a href="/" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-home mr-3"></i>
-                    Dashboard
-                </a>
-                <a href="/airtime" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-mobile-alt mr-3"></i>
-                    Airtime Payments
-                </a>
-                <a href="/incoming-money" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-arrow-down mr-3"></i>
-                    Incoming Money
-                </a>
-                <a href="/transfers-to-mobile" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-paper-plane mr-3"></i>
-                    Mobile Transfers
-                </a>
-                <a href="/code-holders" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-qrcode mr-3"></i>
-                    Code Payments
-                </a>
-                <a href="/bank-transfers" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-university mr-3"></i>
-                    Bank Transfers
-                </a>
-                <a href="/internet-voice" class="flex items-center px-4 py-3 text-white bg-blue-600 border-r-4 border-blue-800 transition-colors">
-                    <i class="fas fa-wifi mr-3"></i>
-                    Internet/Voice Bundles
-                </a>
-                <a href="/cash-power" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-bolt mr-3"></i>
-                    CashPower
-                </a>
-                <a href="/third-parties" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-handshake mr-3"></i>
-                    Third Party
-                </a>
-                <a href="/agent-withdrawals" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-hand-holding-usd mr-3"></i>
-                    Agent Withdrawals
-                </a>
-            </nav>
-        </aside>
+      <!-- Sidebar -->
+      <aside
+        class="w-64 bg-white shadow-lg min-h-screen sticky top-0"
+        id="sidebar"
+      >
+        <div class="flex items-center justify-between p-4 border-b">
+          <h2 class="text-lg font-semibold text-gray-800">Navigation</h2>
+        </div>
+        <nav class="mt-4">
+          <a
+            href="/"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-home mr-3"></i>
+            Dashboard
+          </a>
+          <a
+            href="/airtime"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-mobile-alt mr-3"></i>
+            Airtime Payments
+          </a>
+          <a
+            href="/incoming-money"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-arrow-down mr-3"></i>
+            Incoming Money
+          </a>
+          <a
+            href="/transfers-to-mobile"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-paper-plane mr-3"></i>
+            Mobile Transfers
+          </a>
+          <a
+            href="/code-holders"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-qrcode mr-3"></i>
+            Code Payments
+          </a>
+          <a
+            href="/bank-transfers"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-university mr-3"></i>
+            Bank Transfers
+          </a>
+          <a
+            href="/internet-voice"
+            class="flex items-center px-4 py-3 text-white bg-blue-600 border-r-4 border-blue-800 transition-colors"
+          >
+            <i class="fas fa-wifi mr-3"></i>
+            Internet/Voice Bundles
+          </a>
+          <a
+            href="/cash-power"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-bolt mr-3"></i>
+            CashPower
+          </a>
+          <a
+            href="/third-parties"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-handshake mr-3"></i>
+            Third Party
+          </a>
+          <a
+            href="/agent-withdrawals"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-hand-holding-usd mr-3"></i>
+            Agent Withdrawals
+          </a>
+        </nav>
+      </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1">
-            <div class="max-w-7xl mx-auto px-4 py-8">
-        <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- Main Content -->
+      <main class="flex-1">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+          <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                <i class="fas fa-table mr-2"></i>Transaction Details
+              <i class="fas fa-table mr-2"></i>Transaction Details
             </h2>
-            
+
             <!-- Transaction Table -->
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3">Transaction ID</th>
-                            <th class="px-6 py-3">Amount</th>
-                            <th class="px-6 py-3">New Balance</th>
-                            <th class="px-6 py-3">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in transactions %}
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="px-6 py-4 font-medium text-gray-900">{{ transaction.txid or transaction.transaction_id or 'N/A' }}</td>
-                            <td class="px-6 py-4">{{ transaction.amount or transaction.payment_amount or 'N/A' }} RWF</td>
-                            <td class="px-6 py-4">{{ transaction.new_balance or 'N/A' }} RWF</td>
-                            <td class="px-6 py-4">{{ transaction.date or transaction.timestamp or 'N/A' }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+              <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3">Transaction ID</th>
+                    <th class="px-6 py-3">Amount</th>
+                    <th class="px-6 py-3">New Balance</th>
+                    <th class="px-6 py-3">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for transaction in transactions %}
+                  <tr class="bg-white border-b hover:bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                      {{ transaction.txid or transaction.transaction_id or 'N/A'
+                      }}
+                    </td>
+                    <td class="px-6 py-4">
+                      {{ transaction.amount or transaction.payment_amount or
+                      'N/A' }} RWF
+                    </td>
+                    <td class="px-6 py-4">
+                      {{ transaction.new_balance or 'N/A' }} RWF
+                    </td>
+                    <td class="px-6 py-4">
+                      {{ transaction.date or transaction.timestamp or 'N/A' }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
+      </main>
     </div>
-        </main>
-    </div>
-</body>
+  </body>
 </html>
